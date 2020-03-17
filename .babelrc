@@ -1,0 +1,12 @@
+// .babelrc
+// @see https://nextjs.org/docs/advanced-features/customizing-babel-config for more.
+{
+  "presets": [
+    [
+      "next/babel"
+    ]
+  ]
+  // "plugins": [
+  //   "inline-react-svg"
+  // ]
+}

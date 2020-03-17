@@ -1,4 +1,6 @@
+import React from 'react'
 import Head from 'next/head'
+import Intro from '../components/Intro'
 
 const Home = () => (
   <div className="container">
@@ -8,10 +10,7 @@ const Home = () => (
     </Head>
 
     <main>
-      <h1 className="title">
-        Welcome to <a href="https://nextjs.org">Next.js!</a>
-      </h1>
-
+      <Intro />
       <p className="description">
         Get started by editing <code>pages/index.js</code>
       </p>
