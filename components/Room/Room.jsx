@@ -12,9 +12,12 @@ export default function Model(props) {
   const { nodes, materials, animations } = useLoader(GLTFLoader, '/models/room.glb')
 
   const [cubeRef, cube] = useResource()
+  const [coneRef, cone] = useResource()
 
   useFrame(() => {
     cube.rotation.y += 0.01
+    cone.rotation.z += 0.04
+    cone.rotation.x += 0.02
   })
 
   return (
@@ -40,10 +43,11 @@ export default function Model(props) {
           />
         </mesh>
         <mesh
+          ref={coneRef} 
           receiveShadow
           position={[0, -10, 0]}
         >
-          <coneGeometry attach="geometry" args={[10, 24, 24, 24]} />
+          <coneGeometry attach="geometry" args={[8, 14, 24, 24]} />
           <meshLambertMaterial
             attach="material"
             color={0xff0000}
