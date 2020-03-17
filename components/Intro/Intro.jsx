@@ -2,14 +2,14 @@
  * @file Intro.js
  */
 import * as THREE from 'three'
-import React, { Suspense } from 'react'
+import React, { Suspense , useState} from 'react'
 import PropTypes from 'prop-types'
 import { Canvas, Dom, useResource } from 'react-three-fiber'
 
-import Room from '../Room'
+// import Room from '../Room'
+import Tree from '../Tree'
 
-
-function Lights (lightColor = '0x00ff00') {
+function Lights (over = false ,lightColor = '0x00ff00') {
   const [spotRef, spotlight] = useResource()
   const [ambientRef, ambient] = useResource()
 
@@ -21,7 +21,7 @@ function Lights (lightColor = '0x00ff00') {
         intensity={.55} /> */}
       <ambientLight
         ref={ambientRef}
-        intensity={0.45}
+        intensity={over ?  0.45 : 2.45 }
         color={lightColor}
         castShadow
       />
@@ -46,8 +46,9 @@ const Intro = (props) => {
     variant,
     children,
   } = props
-
+  const [over,setOver] = useState(false)
   return (
+
     <Tag className={`intro intro--${variant} ${className}`}>
       <Canvas
         shadowMap
@@ -58,10 +59,13 @@ const Intro = (props) => {
           gl.setClearColor(0x1B173B, 0)
           console.log('Canvas loaded...')
         }}
+        onPointerOver={() => setOver(true)}
+        onPointerOut={() => setOver(false)}
       >
-        <Lights />
+        <Lights over={over}/>
         <Suspense fallback={<Dom>Loading...</Dom>}>
-          <Room />
+        <Tree />
+        {/* <Room /> */}
         </Suspense>
       </Canvas>
       {children}
