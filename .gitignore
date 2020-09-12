@@ -21,7 +21,7 @@ comps
 
 # misc
 .DS_Store
-!.env*
+!.env.local.example
 !__tests__/.env
 
 # debug
