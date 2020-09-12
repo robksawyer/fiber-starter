@@ -5,13 +5,13 @@
  * @see https://github.com/JerryCauser/next-compose
  */
 /**
-* Web Workers
-* @see https://github.com/zeit/next-plugins/tree/master/packages/next-workers
-* Using Fonts
-* @see https://github.com/rohanray/next-fonts
-* Environment variables
-* @see https://stackoverflow.com/questions/50416138/nextjs-set-dynamic-environment-variables-at-the-start-of-the-application
-*/
+ * Web Workers
+ * @see https://github.com/zeit/next-plugins/tree/master/packages/next-workers
+ * Using Fonts
+ * @see https://github.com/rohanray/next-fonts
+ * Environment variables
+ * @see https://stackoverflow.com/questions/50416138/nextjs-set-dynamic-environment-variables-at-the-start-of-the-application
+ */
 
 /**
  * Exclude tests and stories from being compiled.
@@ -20,10 +20,18 @@
  * excludeFile: ... (see below)
  */
 const withPlugins = require('next-compose-plugins')
-// const withImages = require('next-images')
-// const withFonts = require('next-fonts')
-// const optimizedImages = require('next-optimized-images')
-const withTM = require('next-transpile-modules') // Useful for threejs modules
+const withFonts = require('next-fonts')
+const withImages = require('next-images')
+const optimizedImages = require('next-optimized-images')
+const withTM = require('next-transpile-modules')([
+  'drei',
+  'three',
+  'postprocessing',
+  'react-three-gui',
+  'react-spring/three',
+  '@react-spring/web',
+  'three-trackballcontrols-ts',
+])
 // const withWorkers = require('@zeit/next-workers')
 
 console.log('NextJs Config Environment:', process.env.NODE_ENV)
@@ -33,7 +41,7 @@ console.log('NextJs Config Environment:', process.env.NODE_ENV)
 // console.log('Client API is running on port', port, 'and protocol', protocol)
 
 const nextConfig = {
-  // distDir: '_next',
+  distDir: '_next',
   // serverRuntimeConfig: { // Will only be available on the server side
   //   wordpressApiUrl: process.env.WORDPRESS_API_URL
   // },
@@ -45,58 +53,40 @@ const nextConfig = {
   // Removes the [BABEL] Note: The code generator has deoptimised the styling of
   compact: true,
   webpack: (config, options) => {
-    const { entry: originalEntry } = config
-    const { isServer, buildId, dev } = options
-    // Fixes npm packages that depend on `fs` module
-    // config.node = {
-    //   fs: 'empty',
-    // };
-
+    const { dev } = options
     if (dev) {
-      // Skip tests and stories from being compiled during development
-      // Note: This speeds up compilation.
-      config.module.rules.push(
-        {
-          test: /\.(spec,test,stories)\.(js|jsx)$/,
-          loader: 'ignore-loader'
+      config.module.rules.push({
+        test: /\.js$/,
+        enforce: 'pre',
+        include: [path.resolve('components'), path.resolve('pages')],
+        exclude: ['/node_modules/', '/.next/', '/out/'],
+        options: {
+          // Compile, but with a warning
+          emitWarning: true,
         },
-      )
+        loader: 'eslint-loader',
+      })
+
+      config.module.rules.push({
+        test: /\.(frag|fragment|vert|vertex|glsl)$/,
+        use: [
+          {
+            loader: 'glsl-shader-loader',
+            options: {},
+          },
+        ],
+      })
     }
-
-    // Load polyfills
-    // @see https://github.com/zeit/next.js/blob/canary/examples/with-polyfills
-    // config.entry = async () => {
-    //   const entries = await originalEntry()
-    //   if (
-    //     entries['main.js'] &&
-    //     !entries['main.js'].includes('./client/polyfills.js')
-    //   ) {
-    //     entries['main.js'].unshift('./client/polyfills.js')
-    //   }
-    //   return entries
-    // }
-
     return config
   },
 }
 
-module.exports = withPlugins([
-  [withTM, {
-    transpileModules: [
-      'three/examples/jsm/postprocessing',
-      'three/examples/jsm/shaders',
-      'three/examples/jsm/lights',
-      'three/examples/jsm/loaders',
-      // 'three/src/loaders',
-      // 'react-spring/three',
-      // 'lodash-es/flatten',
-    ]
-  }],
-  // [withImages, {}],
-  // [optimizedImages, {}],
-  // [withFonts, {}],
-  // [withCSS, {}],
-  // [withWorkers, {
-  //   workerLoaderOptions: { inline: true }
-  // }],
-], nextConfig)
+module.exports = withPlugins(
+  [
+    [withTM, {}],
+    [withFonts, {}],
+    [withImages, {}],
+    [optimizedImages, {}],
+  ],
+  nextConfig
+)

@@ -8,19 +8,25 @@
 # testing
 /coverage
 
+# design items (for reference)
+comps
+
 # next.js
 /.next/
-/_next/
 /out/
+/_next/
 
 # production
 /build
 
 # misc
 .DS_Store
-.env*
+!.env*
+!__tests__/.env
 
 # debug
+# yarn.lock
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
