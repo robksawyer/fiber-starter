@@ -120,7 +120,7 @@
     "shortid": "^2.2.15",
     "spotify-web-api-node": "^4.0.0",
     "tailwindcss": "^1.7.2",
-    "three": "^0.120.1",
+    "three": "^0.137.0",
     "use-tweaks": "^0.1.0",
     "webpack": "^4.40.2",
     "whereami": "^1.0.1",
