@@ -80,7 +80,7 @@
     "next-optimized-images": "^2.5.3",
     "next-react-svg": "^1.1.0",
     "next-transpile-modules": "^4.1.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "nookies": "^2.0.8",
     "postcss-css-variables": "^0.14.0",
     "postcss-easing-gradients": "^3.0.1",
